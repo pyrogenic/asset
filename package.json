@@ -2,8 +2,14 @@
   "name": "@pyrogenic/asset",
   "version": "1.0.0",
   "description": "TypeScript Array Set",
-  "main": "index.js",
+  "main": "lib/index.js",
   "repository": "https://github.com/pyrogenic/asset",
   "author": "Joshua Pollak <abottomlesspit@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "lodash": "~4.17.21"
+  },
+  "scripts": {
+    "preinstall": "yarn tsc"
+  }
 }
