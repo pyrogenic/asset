@@ -1,5 +1,6 @@
+import type { ArraySetContainer, ArraySetOrderRule, PropertyName } from "./index";
 import { arraySetAdd } from "./arraySetAdd";
-import { PropertyName, ArraySetContainer, ElementType, ArraySetOrderRule } from "./index";
+import { spread } from "./spread";
 
 
 export function arraySetAddAll<
@@ -7,9 +8,7 @@ export function arraySetAddAll<
     TKey extends PropertyName>(
         container: ArraySetContainer<TKey, TElement>,
         key: TKey,
-        value: Array<ElementType<TContainer[TKey]>> | undefined,
+        value: TElement[] | undefined,
         sorted?: ArraySetOrderRule<TElement>) {
-    const result = value?.map((i) => arraySetAdd(container, key, i, sorted)).includes(true);
-    if (result) { return true; }
-    return false;
+    return spread(value).map((item) => arraySetAdd(container, key, item, sorted)).includes(true);
 }
