@@ -1,4 +1,4 @@
-import { ArraySetContainer, PropertyName, ValueOrPredicate } from "./index";
+import { ArraySetContainer, Predicate, PropertyName, ValueOrPredicate } from "./index";
 
 /** array set has */
 export function arraySetHas<
@@ -12,7 +12,7 @@ export function arraySetHas<
         return false;
     }
     if (typeof value === "function") {
-        return list.findIndex(value) >= 0;
+        return list.findIndex(value as Predicate<TElement>) >= 0;
     }
-    return list.includes(value);
+    return list.includes(value as TElement);
 }
