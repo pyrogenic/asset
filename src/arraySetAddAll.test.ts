@@ -1,4 +1,4 @@
-import { arraySetAdd } from "./arraySetAdd";
+import { arraySetAddAll } from "./arraySetAddAll";
 
 class Test {
     constructor(public readonly value: string) { }
@@ -8,7 +8,6 @@ type Container = {
     strings?: string[],
     objects?: Test[],
 };
-
 const alphaTest = new Test("alpha");
 const testTest = new Test("test");
 const zetaTest = new Test("zeta");
@@ -18,23 +17,29 @@ describe("strings", () => {
         const container: Container = {
             strings: [],
         };
-        expect(arraySetAdd(container, "strings", "test")).toBeTruthy();
+        arraySetAddAll(container, "strings", ["test"]);
         expect(container.strings).toEqual(["test"]);
+        arraySetAddAll(container, "strings", ["foo", "test", "bar"]);
+        expect(container.strings).toEqual(["test", "foo", "bar"]);
     });
 
     test("existing", () => {
         const container: Container = {
             strings: ["zoo"],
         };
-        expect(arraySetAdd(container, "strings", "test")).toBeTruthy();
+        arraySetAddAll(container, "strings", ["test"]);
         expect(container.strings).toEqual(["zoo", "test"]);
+        arraySetAddAll(container, "strings", ["foo", "test", "bar"]);
+        expect(container.strings).toEqual(["zoo", "test", "foo", "bar"]);
     });
 
     test("existing dupe", () => {
         const container: Container = {
             strings: ["test"],
         };
-        expect(arraySetAdd(container, "strings", "test")).toBeFalsy();
+        arraySetAddAll(container, "strings", ["test"]);
+        expect(container.strings).toEqual(["test"]);
+        arraySetAddAll(container, "strings", ["test", "test"]);
         expect(container.strings).toEqual(["test"]);
     });
 
@@ -42,11 +47,11 @@ describe("strings", () => {
         const container: Container = {
             strings: ["zoo", "test"],
         };
-        expect(arraySetAdd(container, "strings", "test")).toBeFalsy();
+        arraySetAddAll(container, "strings", ["test"]);
         expect(container.strings).toEqual(["zoo", "test"]);
-        expect(arraySetAdd(container, "strings", "zoo")).toBeFalsy();
+        arraySetAddAll(container, "strings", ["zoo", "test"]);
         expect(container.strings).toEqual(["zoo", "test"]);
-        expect(arraySetAdd(container, "strings", "alpha")).toBeTruthy();
+        arraySetAddAll(container, "strings", ["alpha", "zoo", "test"]);
         expect(container.strings).toEqual(["zoo", "test", "alpha"]);
     });
 
@@ -54,36 +59,44 @@ describe("strings", () => {
         const container: Container = {
             strings: ["alpha", "zeta"],
         };
-        expect(arraySetAdd(container, "strings", "test", true)).toBeTruthy();
+        arraySetAddAll(container, "strings", ["test"], true);
         expect(container.strings).toEqual(["alpha", "test", "zeta"]);
-        expect(arraySetAdd(container, "strings", "test", true)).toBeFalsy();
+        arraySetAddAll(container, "strings", ["test"], true);
         expect(container.strings).toEqual(["alpha", "test", "zeta"]);
+        arraySetAddAll(container, "strings", ["alpha", "zoo", "test"], true);
+        expect(container.strings).toEqual(["alpha", "test", "zeta", "zoo"]);
     });
 
     test("sorted (mru)", () => {
         const container: Container = {
             strings: ["alpha", "zeta"],
         };
-        expect(arraySetAdd(container, "strings", "test", "mru")).toBeTruthy();
+        arraySetAddAll(container, "strings", ["test"], "mru");
         expect(container.strings).toEqual(["alpha", "zeta", "test"]);
-        expect(arraySetAdd(container, "strings", "alpha", "mru")).toBeFalsy();
+        arraySetAddAll(container, "strings", ["alpha"], "mru");
         expect(container.strings).toEqual(["zeta", "test", "alpha"]);
+        arraySetAddAll(container, "strings", ["alpha", "zoo", "test"], "mru");
+        expect(container.strings).toEqual(["zeta", "alpha", "zoo", "test"]);
     });
 
     test("sorted (comparer)", () => {
         const container: Container = {
             strings: ["alpha", "zeta"],
         };
-        expect(arraySetAdd(container, "strings", "test", testToHead)).toBeTruthy();
+        arraySetAddAll(container, "strings", ["test"], testToHead);
         expect(container.strings).toEqual(["test", "alpha", "zeta"]);
-        expect(arraySetAdd(container, "strings", "alpha", testToHead)).toBeFalsy();
+        arraySetAddAll(container, "strings", ["alpha"], testToHead);
         expect(container.strings).toEqual(["test", "alpha", "zeta"]);
+        arraySetAddAll(container, "strings", ["alpha", "zoo", "test"], testToHead);
+        expect(container.strings).toEqual(["test", "alpha", "zeta", "zoo"]);
     });
 
     test("undefined", () => {
         const container: Container = {};
-        expect(arraySetAdd(container, "strings", "test")).toBeTruthy();
+        arraySetAddAll(container, "strings", ["test"]);
         expect(container.strings).toEqual(["test"]);
+        arraySetAddAll(container, "strings", ["test", "alpha"]);
+        expect(container.strings).toEqual(["test", "alpha"]);
     });
 });
 
@@ -92,7 +105,7 @@ describe("objects", () => {
         const container: Container = {
             objects: [],
         };
-        expect(arraySetAdd(container, "objects", testTest)).toBeTruthy();
+        arraySetAddAll(container, "objects", [testTest]);
         expect(container.objects).toEqual([testTest]);
     });
 
@@ -100,7 +113,9 @@ describe("objects", () => {
         const container: Container = {
             objects: [zetaTest],
         };
-        expect(arraySetAdd(container, "objects", testTest)).toBeTruthy();
+        arraySetAddAll(container, "objects", [testTest]);
+        expect(container.objects).toEqual([zetaTest, testTest]);
+        arraySetAddAll(container, "objects", [testTest, testTest]);
         expect(container.objects).toEqual([zetaTest, testTest]);
     });
 
@@ -108,7 +123,7 @@ describe("objects", () => {
         const container: Container = {
             objects: [testTest],
         };
-        expect(arraySetAdd(container, "objects", testTest)).toBeFalsy();
+        arraySetAddAll(container, "objects", [testTest]);
         expect(container.objects).toEqual([testTest]);
     });
 
@@ -116,11 +131,11 @@ describe("objects", () => {
         const container: Container = {
             objects: [zetaTest, testTest],
         };
-        expect(arraySetAdd(container, "objects", testTest)).toBeFalsy();
+        arraySetAddAll(container, "objects", [testTest]);
         expect(container.objects).toEqual([zetaTest, testTest]);
-        expect(arraySetAdd(container, "objects", zetaTest)).toBeFalsy();
+        arraySetAddAll(container, "objects", [zetaTest]);
         expect(container.objects).toEqual([zetaTest, testTest]);
-        expect(arraySetAdd(container, "objects", alphaTest)).toBeTruthy();
+        arraySetAddAll(container, "objects", [alphaTest, zetaTest]);
         expect(container.objects).toEqual([zetaTest, testTest, alphaTest]);
     });
 
@@ -129,9 +144,9 @@ describe("objects", () => {
     //     const container: Container = {
     //         objects: [alphaTest, zetaTest],
     //     };
-    //     arraySetAdd(container, "objects", testTest, true);
+    //     arraySetAddAll(container, "objects", [testTest], true);
     //     expect(container.objects).toEqual([alphaTest, testTest, zetaTest]);
-    //     arraySetAdd(container, "objects", testTest, true);
+    //     arraySetAddAll(container, "objects", [testTest], true);
     //     expect(container.objects).toEqual([alphaTest, testTest, zetaTest]);
     // });
 
@@ -139,9 +154,11 @@ describe("objects", () => {
         const container: Container = {
             objects: [alphaTest, zetaTest],
         };
-        expect(arraySetAdd(container, "objects", testTest, compareTests)).toBeTruthy();
+        arraySetAddAll(container, "objects", [testTest], compareTests);
         expect(container.objects).toEqual([alphaTest, testTest, zetaTest]);
-        expect(arraySetAdd(container, "objects", testTest, compareTests)).toBeFalsy();
+        arraySetAddAll(container, "objects", [testTest, testTest], compareTests);
+        expect(container.objects).toEqual([alphaTest, testTest, zetaTest]);
+        arraySetAddAll(container, "objects", [alphaTest, testTest], compareTests);
         expect(container.objects).toEqual([alphaTest, testTest, zetaTest]);
     });
 
@@ -149,26 +166,36 @@ describe("objects", () => {
         const container: Container = {
             objects: [alphaTest, zetaTest],
         };
-        expect(arraySetAdd(container, "objects", testTest, "mru")).toBeTruthy();
+        arraySetAddAll(container, "objects", [testTest], "mru");
         expect(container.objects).toEqual([alphaTest, zetaTest, testTest]);
-        expect(arraySetAdd(container, "objects", alphaTest, "mru")).toBeFalsy();
+        arraySetAddAll(container, "objects", [alphaTest], "mru");
         expect(container.objects).toEqual([zetaTest, testTest, alphaTest]);
+        arraySetAddAll(container, "objects", [alphaTest, testTest], "mru");
+        expect(container.objects).toEqual([zetaTest, alphaTest, testTest]);
     });
 
     test("sorted (comparer)", () => {
         const container: Container = {
             objects: [alphaTest, zetaTest],
         };
-        expect(arraySetAdd(container, "objects", testTest, compareTestsTestToHead)).toBeTruthy();
+        arraySetAddAll(container, "objects", [testTest], compareTestsTestToHead);
         expect(container.objects).toEqual([testTest, alphaTest, zetaTest]);
-        expect(arraySetAdd(container, "objects", alphaTest, compareTestsTestToHead)).toBeFalsy();
+        arraySetAddAll(container, "objects", [alphaTest], compareTestsTestToHead);
         expect(container.objects).toEqual([testTest, alphaTest, zetaTest]);
     });
 
     test("undefined", () => {
         const container: Container = {};
-        expect(arraySetAdd(container, "objects", testTest)).toBeTruthy();
+        arraySetAddAll(container, "objects", [testTest]);
         expect(container.objects).toEqual([testTest]);
+
+        delete container.objects;
+        arraySetAddAll(container, "objects", [testTest, testTest]);
+        expect(container.objects).toEqual([testTest]);
+
+        delete container.objects;
+        arraySetAddAll(container, "objects", [testTest, zetaTest]);
+        expect(container.objects).toEqual([testTest, zetaTest]);
     });
 });
 

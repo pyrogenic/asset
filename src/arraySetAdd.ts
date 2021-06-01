@@ -2,8 +2,13 @@ import { isEqual } from "lodash";
 import { ArraySetOrderRule, ArraySetContainer, PropertyName } from "./index";
 import { ensureArray } from "./ensureArray";
 
-/** array set add */
-
+/** 
+ * @param container object with an array property called {@link key}
+ * @param key name of an array property on {@link container}
+ * @param value to add to the array set
+ * @param sorted keeps the set in a particular order (see {@link ArraySetOrderRule} for more information).
+ * @return [true] if {@link value} was newly-added to the set
+ */
 export function arraySetAdd<
     TElement,
     TKey extends PropertyName,
@@ -14,7 +19,8 @@ export function arraySetAdd<
         sorted?: ArraySetOrderRule<TElement>): boolean {
     const list = ensureArray(container, key);
     const index = typeof value !== "object" ? list.indexOf(value) : list.findIndex(isEqual.bind(null, value));
-    if (index >= 0) {
+    const notNew = index >= 0;
+    if (notNew) {
         if (sorted !== "mru") {
             return false;
         } else {
@@ -27,5 +33,5 @@ export function arraySetAdd<
     } else if (sorted === true) {
         list.sort();
     }
-    return true;
+    return !notNew;
 }

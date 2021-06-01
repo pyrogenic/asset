@@ -1,6 +1,6 @@
 import { isEqual, PropertyName } from "lodash";
 import { arraySetAdd } from "./arraySetAdd";
-import { ArrayPropertyNames, PropertyNamesOfType, ElementType, ArraySetOrderRule, ArraySetContainer } from "./index";
+import { ArraySetOrderRule, ArraySetContainer } from "./index";
 import { ensureArray } from "./ensureArray";
 
 /**

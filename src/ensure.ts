@@ -1,19 +1,36 @@
 import { PropertyName } from "./index";
 
 
+type ConstructorOrFactory<
+    TResult,
+    TKey extends PropertyName,
+    TContainer extends {
+        [K in TKey]?: TResult;
+    },
+    > = { new(): Required<TContainer>[TKey] } | {
+        factory: () => Required<TContainer>[TKey];
+    };
+
 export function ensure<
     TResult,
     TKey extends PropertyName,
     TContainer extends {
-        [K in TKey]: TResult;
+        [K in TKey]?: TResult;
     }>(
         container: TContainer,
         key: TKey,
-        factory: new () => Required<TContainer>[TKey]): Required<TContainer>[TKey] {
+        factory: ConstructorOrFactory<TResult, TKey, TContainer>): Required<TContainer>[TKey] {
     let value = container[key];
-    if (container[key] === undefined) {
-        value = new factory();
-        container[key] = value;
+    if (value !== undefined) {
+        return value;
     }
-    return value;
+    switch (typeof factory) {
+        case "function":
+            value = new factory();
+            break;
+        default:
+            value = factory.factory();
+            break;
+    }
+    return container[key] = value;
 }

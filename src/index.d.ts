@@ -1,10 +1,12 @@
-import type { Primitive } from "lodash";
-
+export * from "./array";
 export * from "./arraySetAdd";
 export * from "./arraySetClear";
 export * from "./arraySetHas";
 export * from "./arraySetRemove";
 export * from "./arraySetToggle";
+export * from "./ensure";
+export * from "./ensureArray";
+export * from "./ensureMap";
 
 export type Diff<T, U> = T extends U ? never : T;  // Remove types from T that are assignable to U
 export type Filter<T, U> = T extends U ? T : never;  // Remove types from T that are not assignable to U
@@ -13,7 +15,7 @@ export type PropertyName = string | symbol | number;
 
 export type ArrayLike<TElement> = Pick<TElement[], "slice" | "length" | "findIndex" | "includes"> & { [K: number]: TElement };
 
-export type ArraySetContainer<TKey extends string | symbol | number, TElement> = {
+export type ArraySetContainer<TKey extends string | symbol | number, TElement> = TElement extends Function ? never : {
     [K in TKey]?: TElement[];
 };
 
@@ -66,4 +68,7 @@ export type ArrayPropertyElementTypes<TContainer> = {
     [K in ArrayPropertyNames<TContainer>]: ElementType<TContainer[K]>
 }[keyof ArrayProperties<TContainer>];
 
+type AnyFunction = (...args: any) => any;
 
+export type Predicate<TElement> = Parameters<TElement[]["findIndex"]>[0];
+export type ValueOrPredicate<TElement> = TElement extends AnyFunction ? never : (TElement | Predicate<TElement>);

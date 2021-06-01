@@ -5,9 +5,10 @@ export function ensureArray<
     TElement>(
         container: ArraySetContainer<TKey, TElement>,
         key: TKey): TElement[] {
-    let value = container[key];
+    let value: TElement[] | undefined = container[key];
     if (value !== undefined) {
-        return value!;
+        return value;
     }
-    return container[key] = [];
+    type ActualValue = Exclude<ArraySetContainer<TKey, TElement>[TKey], undefined>;
+    return container[key] = new Array() as ActualValue;
 }
