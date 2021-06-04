@@ -1,5 +1,5 @@
 import { isEqual } from "lodash";
-import { ArraySetOrderRule, ArraySetContainer, PropertyName } from "./index";
+import { ArraySetOrderRule, ArraySetContainer, PropertyName, ElementType } from "./index";
 import { ensureArray } from "./ensureArray";
 
 /** 
@@ -10,9 +10,9 @@ import { ensureArray } from "./ensureArray";
  * @return [true] if {@link value} was newly-added to the set
  */
 export function arraySetAdd<
-    TElement,
     TKey extends PropertyName,
-    TContainer extends ArraySetContainer<TKey, TElement>>(
+    TContainer extends ArraySetContainer<TKey, any>,
+    TElement extends ElementType<TContainer[TKey]>>(
         container: TContainer,
         key: TKey,
         value: TElement,

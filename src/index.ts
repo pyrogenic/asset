@@ -1,5 +1,6 @@
 export * from "./array";
 export * from "./arraySetAdd";
+export * from "./arraySetAddAll";
 export * from "./arraySetClear";
 export * from "./arraySetHas";
 export * from "./arraySetRemove";
@@ -7,6 +8,9 @@ export * from "./arraySetToggle";
 export * from "./ensure";
 export * from "./ensureArray";
 export * from "./ensureMap";
+export * from "./peek";
+export * from "./spread";
+export * from "./sync";
 
 export type Diff<T, U> = T extends U ? never : T;  // Remove types from T that are assignable to U
 export type Filter<T, U> = T extends U ? T : never;  // Remove types from T that are not assignable to U

@@ -1,12 +1,13 @@
-import { ArraySetContainer, Predicate, PropertyName, ValueOrPredicate } from "./index";
+import type { ArraySetContainer, ElementType, Predicate, PropertyName, ValueOrPredicate } from "./index";
 
 /** array set has */
 export function arraySetHas<
-    TElement,
-    TKey extends PropertyName>(
-        container: ArraySetContainer<TKey, TElement>,
+    TKey extends PropertyName,
+    TContainer extends ArraySetContainer<TKey, any>,
+    TElement extends ElementType<TContainer[TKey]>>(
+        container: TContainer,
         key: TKey,
-        value: ValueOrPredicate<TElement>) {
+        value: ValueOrPredicate<TElement>): boolean {
     const list = container[key];
     if (list === undefined) {
         return false;

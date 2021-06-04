@@ -1,6 +1,6 @@
 import { isEqual, PropertyName } from "lodash";
 import { arraySetAdd } from "./arraySetAdd";
-import { ArraySetOrderRule, ArraySetContainer } from "./index";
+import { ArraySetOrderRule, ArraySetContainer, ElementType } from "./index";
 import { ensureArray } from "./ensureArray";
 
 /**
@@ -8,12 +8,13 @@ import { ensureArray } from "./ensureArray";
  */
 
 export function arraySetToggle<
-    TElement,
-    TKey extends PropertyName>(
-        container: ArraySetContainer<TKey, TElement>,
+    TKey extends PropertyName,
+    TContainer extends ArraySetContainer<TKey, any>,
+    TElement extends ElementType<TContainer[TKey]>>(
+        container: TContainer,
         key: TKey,
         value: TElement,
-        sorted?: ArraySetOrderRule<TElement>) {
+        sorted?: ArraySetOrderRule<TElement>): boolean {
     if (container[key] === undefined) {
         arraySetAdd(container, key, value, sorted);
         return true;
