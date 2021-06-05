@@ -5,7 +5,7 @@ import { ensureArray } from "./ensureArray";
 export function arraySetAdd<
     TElement>(
         container: TElement[],
-        value: ValueOrPredicate<TElement>,
+        value: TElement,
         sorted?: ArraySetOrderRule<TElement>): boolean;
 
 /** 
