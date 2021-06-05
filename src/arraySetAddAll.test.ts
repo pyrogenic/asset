@@ -17,10 +17,17 @@ describe("strings", () => {
         const container: Container = {
             strings: [],
         };
+        arraySetAddAll(container, "strings", undefined);
+        expect(container.strings).toEqual([]);
+
+        arraySetAddAll(container, "strings", []);
+        expect(container.strings).toEqual([]);
+
         arraySetAddAll(container, "strings", ["test"]);
         expect(container.strings).toEqual(["test"]);
         arraySetAddAll(container, "strings", ["foo", "test", "bar"]);
         expect(container.strings).toEqual(["test", "foo", "bar"]);
+
     });
 
     test("existing", () => {
@@ -93,8 +100,15 @@ describe("strings", () => {
 
     test("undefined", () => {
         const container: Container = {};
+        arraySetAddAll(container, "strings", undefined);
+        expect(container.strings).toEqual(undefined);
+
+        arraySetAddAll(container, "strings", []);
+        expect(container.strings).toEqual(undefined);
+
         arraySetAddAll(container, "strings", ["test"]);
         expect(container.strings).toEqual(["test"]);
+
         arraySetAddAll(container, "strings", ["test", "alpha"]);
         expect(container.strings).toEqual(["test", "alpha"]);
     });

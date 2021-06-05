@@ -27,6 +27,8 @@ describe("arraySetRemove", () => {
         expect(arraySetRemove(container, "objects", alphaTest)).toBeFalsy();
         expect(container.strings).toBe(strings);
         expect(container.objects).toBe(objects);
+        expect(arraySetRemove([], "alpha")).toBeFalsy();
+        expect(arraySetRemove([], alphaTest)).toBeFalsy();
     });
 
     test("not empty", () => {
@@ -46,6 +48,24 @@ describe("arraySetRemove", () => {
         expect(container.strings).toBe(strings);
         expect(container.objects).toBe(objects);
     });
+
+    test("not empty, uncontained", () => {
+        const strings: string[] = ["zeta"];
+        const objects: Test[] = [zetaTest];
+        expect(arraySetRemove(strings, "alpha")).toBeFalsy();
+        expect(arraySetRemove(objects, alphaTest)).toBeFalsy();
+        expect(strings).toEqual(["zeta"]);
+        expect(objects).toEqual([zetaTest]);
+        expect(arraySetRemove(strings, "zeta")).toBeTruthy();
+        expect(arraySetRemove(objects, zetaTest)).toBeTruthy();
+        expect(strings).toEqual([]);
+        expect(objects).toEqual([]);
+        expect(arraySetRemove(strings, "zeta")).toBeFalsy();
+        expect(arraySetRemove(objects, zetaTest)).toBeFalsy();
+        expect(strings).toEqual([]);
+        expect(objects).toEqual([]);
+    });
+
     test("predicate, undefined", () => {
         const container: Container = {};
         expect(arraySetRemove(container, "strings", startsWithA)).toBeFalsy();

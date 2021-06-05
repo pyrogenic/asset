@@ -15,6 +15,8 @@ describe("arraySetHas", () => {
     test("undefined", () => {
         const container: Container = {};
         expect(arraySetHas(container, "strings", "alpha")).toBe(false);
+        const arr = container.strings;
+        expect(arraySetHas(arr, "alpha")).toBe(false);
         expect(arraySetHas(container, "objects", alphaTest)).toBe(false);
     });
 
@@ -26,6 +28,7 @@ describe("arraySetHas", () => {
             objects,
         };
         expect(arraySetHas(container, "strings", "alpha")).toBe(false);
+        expect(arraySetHas(container.strings, "alpha")).toBe(false);
         expect(arraySetHas(container, "objects", alphaTest)).toBe(false);
     });
 
@@ -37,7 +40,9 @@ describe("arraySetHas", () => {
             objects,
         };
         expect(arraySetHas(container, "strings", "alpha")).toBe(true);
+        expect(arraySetHas(container.strings, "alpha")).toBe(true);
         expect(arraySetHas(container, "strings", "zeta")).toBe(false);
+        expect(arraySetHas(container.strings, "zeta")).toBe(false);
         expect(arraySetHas(container, "objects", alphaTest)).toBe(true);
         expect(arraySetHas(container, "objects", zetaTest)).toBe(false);
     });
@@ -45,6 +50,7 @@ describe("arraySetHas", () => {
     test("pedicate, undefined", () => {
         const container: Container = {};
         expect(arraySetHas(container, "strings", startsWithA)).toBe(false);
+        expect(arraySetHas(container.strings, startsWithA)).toBe(false);
         expect(arraySetHas(container, "objects", testValueStartsWithA)).toBe(false);
     });
 
@@ -56,6 +62,7 @@ describe("arraySetHas", () => {
             objects,
         };
         expect(arraySetHas(container, "strings", startsWithA)).toBe(false);
+        expect(arraySetHas(container.strings, startsWithA)).toBe(false);
         expect(arraySetHas(container, "objects", testValueStartsWithA)).toBe(false);
     });
 
@@ -67,7 +74,9 @@ describe("arraySetHas", () => {
             objects,
         };
         expect(arraySetHas(container, "strings", startsWithA)).toBe(true);
+        expect(arraySetHas(container.strings, startsWithA)).toBe(true);
         expect(arraySetHas(container, "strings", startsWithZ)).toBe(false);
+        expect(arraySetHas(container.strings, startsWithZ)).toBe(false);
         expect(arraySetHas(container, "objects", testValueStartsWithA)).toBe(true);
         expect(arraySetHas(container, "objects", testValueStartsWithZ)).toBe(false);
     });

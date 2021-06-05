@@ -19,6 +19,14 @@ describe("arraySetToggle", () => {
         expect(arraySetToggle(container, "objects", alphaTest)).toBeTruthy();
         expect(container).toHaveProperty("strings", ["alpha"]);
         expect(container).toHaveProperty("objects", [alphaTest]);
+        expect(arraySetToggle(container.strings, "alpha")).toBeFalsy();
+        expect(arraySetToggle(container.objects, alphaTest)).toBeFalsy();
+        expect(container.strings).toEqual([]);
+        expect(container.objects).toEqual([]);
+        expect(arraySetToggle(container.strings, "alpha")).toBeTruthy();
+        expect(arraySetToggle(container.objects, alphaTest)).toBeTruthy();
+        expect(container.strings).toEqual(["alpha"]);
+        expect(container.objects).toEqual([alphaTest]);
     });
 
     test("empty", () => {
@@ -75,6 +83,10 @@ describe("arraySetToggle", () => {
         expect(container).toHaveProperty("objects", [alphaTest, zetaTest]);
         expect(container.strings).toBe(strings);
         expect(container.objects).toBe(objects);
+        expect(arraySetToggle(strings, "zeta", true)).toBeFalsy();
+        expect(arraySetToggle(objects, zetaTest, sortByTestValue)).toBeFalsy();
+        expect(arraySetToggle(strings, "zeta", true)).toBeTruthy();
+        expect(arraySetToggle(objects, zetaTest, sortByTestValue)).toBeTruthy();
     });
 });
 

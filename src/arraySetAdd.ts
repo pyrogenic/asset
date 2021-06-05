@@ -1,6 +1,12 @@
 import { isEqual } from "lodash";
-import { ArraySetOrderRule, ArraySetContainer, PropertyName, ElementType } from "./index";
+import { ArraySetOrderRule, ArraySetContainer, PropertyName, ElementType, ValueOrPredicate } from "./index";
 import { ensureArray } from "./ensureArray";
+
+export function arraySetAdd<
+    TElement>(
+        container: TElement[],
+        value: ValueOrPredicate<TElement>,
+        sorted?: ArraySetOrderRule<TElement>): boolean;
 
 /** 
  * @param container object with an array property called {@link key}
@@ -16,8 +22,28 @@ export function arraySetAdd<
         container: TContainer,
         key: TKey,
         value: TElement,
-        sorted?: ArraySetOrderRule<TElement>): boolean {
-    const list = ensureArray(container, key);
+        sorted?: ArraySetOrderRule<TElement>): boolean;
+
+export function arraySetAdd<
+    TKey extends PropertyName,
+    TContainer extends ArraySetContainer<TKey, any>,
+    TElement extends ElementType<TContainer[TKey]>>(
+        container: TContainer | TElement[],
+        keyOrValue: TKey | TElement,
+        valueOrSorted?: TElement | ArraySetOrderRule<TElement>,
+        sortedOrNothing?: ArraySetOrderRule<TElement>): boolean {
+    let list: TElement[];
+    let value: TElement;
+    let sorted: ArraySetOrderRule<TElement> | undefined;
+    if (Array.isArray(container)) {
+        list = container;
+        value = keyOrValue as TElement;
+        sorted = valueOrSorted;
+    } else {
+        list = ensureArray(container, keyOrValue);
+        value = valueOrSorted as TElement;
+        sorted = sortedOrNothing;
+    }
     const index = typeof value !== "object" ? list.indexOf(value) : list.findIndex(isEqual.bind(null, value));
     const notNew = index >= 0;
     if (notNew) {

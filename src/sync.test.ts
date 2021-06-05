@@ -65,11 +65,11 @@ describe("sync", () => {
     });
 
     it("adds new at end (multiple)", () => {
-        const from = [4, 3, 2, 1];
+        const from = [5, 4, 3, 2, 1];
         const to = [1, 3];
         sync(from, to);
-        expect(from).toEqual([4, 3, 2, 1]);
-        expect(to).toEqual([1, 3, 4, 2]);
+        expect(from).toEqual([5, 4, 3, 2, 1]);
+        expect(to).toEqual([1, 3, 5, 4, 2]);
         expect(to.sort()).toEqual(from.sort());
     });
 

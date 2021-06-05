@@ -1,17 +1,50 @@
 import { isEqual } from "lodash";
-import { PropertyName, ArraySetContainer, ValueOrPredicate, Predicate } from "./index";
+import { PropertyName, ArraySetContainer, ValueOrPredicate, Predicate, ArraySetOrderRule, ElementType } from "./index";
 import { ensureArray } from "./ensureArray";
 
+/**
+ * @param container list of elements
+ * @param value to remove from the array set
+ * @return [true] if {@link value} was removed from the set
+ */
 export function arraySetRemove<
-    TElement,
-    TKey extends PropertyName>(
-        container: ArraySetContainer<TKey, TElement>,
+     TElement>(
+         container: TElement[],
+         value: ValueOrPredicate<TElement>): boolean;
+
+/** 
+ * @param container object with an array property called {@link key}
+ * @param key name of an array property on {@link container}
+ * @param value to remove from the array set
+ * @return [true] if {@link value} was removed from the set
+ */
+export function arraySetRemove<
+    TKey extends PropertyName,
+    TContainer extends ArraySetContainer<TKey, any>,
+    TElement extends ElementType<TContainer[TKey]>>(
+        container: TContainer,
         key: TKey,
-        value: ValueOrPredicate<TElement>) {
-    if (container[key] === undefined) {
-        return false;
+        value: TElement): boolean;
+
+export function arraySetRemove<
+    TKey extends PropertyName,
+    TContainer extends ArraySetContainer<TKey, any>,
+    TElement extends ElementType<TContainer[TKey]>>(
+        container: TContainer | TElement[],
+        keyOrValue: TKey | TElement,
+        valueOrNothing?: TElement): boolean {
+    let list: TElement[];
+    let value: TElement;
+    if (Array.isArray(container)) {
+        list = container;
+        value = keyOrValue as TElement;
+    } else {
+        if (container[keyOrValue] === undefined) {
+            return false;
+        }
+        list = ensureArray(container, keyOrValue);
+        value = valueOrNothing as TElement;
     }
-    const list = ensureArray(container, key);
     let index: number;
     switch (typeof value) {
         case "function":
