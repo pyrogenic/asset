@@ -114,6 +114,79 @@ describe("strings", () => {
     });
 });
 
+describe("uncontained ", () => {
+    test("empty", () => {
+        const container = [];
+        arraySetAddAll(container, undefined);
+        expect(container).toEqual([]);
+
+        arraySetAddAll(container, []);
+        expect(container).toEqual([]);
+
+        arraySetAddAll(container, ["test"]);
+        expect(container).toEqual(["test"]);
+        arraySetAddAll(container, ["foo", "test", "bar"]);
+        expect(container).toEqual(["test", "foo", "bar"]);
+
+    });
+
+    test("existing", () => {
+        const container = ["zoo"];
+        arraySetAddAll(container, ["test"]);
+        expect(container).toEqual(["zoo", "test"]);
+        arraySetAddAll(container, ["foo", "test", "bar"]);
+        expect(container).toEqual(["zoo", "test", "foo", "bar"]);
+    });
+
+    test("existing dupe", () => {
+        const container = ["test"];
+        arraySetAddAll(container, ["test"]);
+        expect(container).toEqual(["test"]);
+        arraySetAddAll(container, ["test", "test"]);
+        expect(container).toEqual(["test"]);
+    });
+
+    test("existing different plus dupe", () => {
+        const container = ["zoo", "test"];
+        arraySetAddAll(container, ["test"]);
+        expect(container).toEqual(["zoo", "test"]);
+        arraySetAddAll(container, ["zoo", "test"]);
+        expect(container).toEqual(["zoo", "test"]);
+        arraySetAddAll(container, ["alpha", "zoo", "test"]);
+        expect(container).toEqual(["zoo", "test", "alpha"]);
+    });
+
+    test("sorted (default)", () => {
+        const container = ["alpha", "zeta"];
+        arraySetAddAll(container, ["test"], true);
+        expect(container).toEqual(["alpha", "test", "zeta"]);
+        arraySetAddAll(container, ["test"], true);
+        expect(container).toEqual(["alpha", "test", "zeta"]);
+        arraySetAddAll(container, ["alpha", "zoo", "test"], true);
+        expect(container).toEqual(["alpha", "test", "zeta", "zoo"]);
+    });
+
+    test("sorted (mru)", () => {
+        const container = ["alpha", "zeta"];
+        arraySetAddAll(container, ["test"], "mru");
+        expect(container).toEqual(["alpha", "zeta", "test"]);
+        arraySetAddAll(container, ["alpha"], "mru");
+        expect(container).toEqual(["zeta", "test", "alpha"]);
+        arraySetAddAll(container, ["alpha", "zoo", "test"], "mru");
+        expect(container).toEqual(["zeta", "alpha", "zoo", "test"]);
+    });
+
+    test("sorted (comparer)", () => {
+        const container = ["alpha", "zeta"];
+        arraySetAddAll(container, ["test"], testToHead);
+        expect(container).toEqual(["test", "alpha", "zeta"]);
+        arraySetAddAll(container, ["alpha"], testToHead);
+        expect(container).toEqual(["test", "alpha", "zeta"]);
+        arraySetAddAll(container, ["alpha", "zoo", "test"], testToHead);
+        expect(container).toEqual(["test", "alpha", "zeta", "zoo"]);
+    });
+});
+
 describe("objects", () => {
     test("empty", () => {
         const container: Container = {
