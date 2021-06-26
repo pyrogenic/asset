@@ -5,6 +5,7 @@ export * from "./arraySetClear";
 export * from "./arraySetHas";
 export * from "./arraySetRemove";
 export * from "./arraySetToggle";
+export * from "./compare";
 export * from "./ensure";
 export * from "./ensureArray";
 export * from "./ensureMap";
