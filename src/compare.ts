@@ -2,6 +2,7 @@ type Comparand<T> = undefined | string | Comparand<T>[];
 type Options<T> = {
     emptyLast?: boolean;
     toString?: (v: T) => Comparand<T>;
+    library?: boolean;
 }
 
 export function compare<T>(a: Comparand<T>, b: Comparand<T>, options?: Options<T>): number {
@@ -41,6 +42,10 @@ export function compare<T>(a: Comparand<T>, b: Comparand<T>, options?: Options<T
     }
     if (typeof a === "string") {
         if (typeof b === "string") {
+            if (options?.library) {
+                a = librarianize(a);
+                b = librarianize(b);
+            }
             return a.localeCompare(b);
         } else if (options?.toString) {
             return compare(a, options.toString(b), options);
@@ -63,3 +68,11 @@ function arrayLike<T>(a: string | Comparand<T>[]): a is Comparand<T>[] {
     // }
     // return false;
 }
+
+function librarianize(src: string): string {
+    src = src.replace(/^\W*((an?|the) )?/i, "");
+    src = src.replace(/\b(Mc)(?=[A-Z])/, "Mac");
+    src = src.replace(/\b(Ste?.) /, "Saint ");
+    return src;
+}
+
