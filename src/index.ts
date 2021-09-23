@@ -9,7 +9,8 @@ export * from "./compare";
 export * from "./ensure";
 export * from "./ensureArray";
 export * from "./ensureMap";
-export * from "./peek";
+export * from "./first";
+export * from "./last";
 export * from "./spread";
 export * from "./sync";
 

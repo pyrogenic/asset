@@ -1,17 +1,17 @@
-import { peek } from "./peek";
-describe("peek", () => {
+import { last } from "./last";
+describe("last", () => {
     test("undefined", () => {
-        expect(peek(undefined)).toBeUndefined();
+        expect(last(undefined)).toBeUndefined();
     });
     ["test", 1, true].forEach((value) => {
         test(`single ${typeof value}`, () => {
-            expect(peek(value)).toBe(value);
+            expect(last(value)).toBe(value);
         });
         test(`monad of ${typeof value}`, () => {
-            expect(peek([value])).toBe(value);
+            expect(last([value])).toBe(value);
         });
         test(`array of ${typeof value}`, () => {
-            expect(peek([value, Math.random()])).toBe(value);
+            expect(last([value, Math.random()])).toBe(value);
         });
     })
 });
