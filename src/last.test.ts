@@ -11,7 +11,7 @@ describe("last", () => {
             expect(last([value])).toBe(value);
         });
         test(`array of ${typeof value}`, () => {
-            expect(last([value, Math.random()])).toBe(value);
+            expect(last([Math.random(), value])).toBe(value);
         });
     })
 });

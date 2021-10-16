@@ -10,7 +10,8 @@ describe("asset", () => {
         expect(Asset).toHaveProperty("ensure");
         expect(Asset).toHaveProperty("ensureArray");
         expect(Asset).toHaveProperty("ensureMap");
-        expect(Asset).toHaveProperty("peek");
+        expect(Asset).toHaveProperty("first");
+        expect(Asset).toHaveProperty("last");
         expect(Asset).toHaveProperty("spread");
         expect(Asset).toHaveProperty("sync");
     })

@@ -1,4 +1,5 @@
-type Comparand<T> = undefined | string | Comparand<T>[];
+type Comparand<T> = undefined | string | T | Comparand<T>[];
+type DefinedComparand<T> = string | T | DefinedComparand<T>[];
 type Options<T> = {
     emptyLast?: boolean;
     toString?: (v: T) => Comparand<T>;
@@ -61,7 +62,7 @@ export function compare<T>(a: Comparand<T>, b: Comparand<T>, options?: Options<T
     return 0;
 }
 
-function arrayLike<T>(a: string | Comparand<T>[]): a is Comparand<T>[] {
+function arrayLike<T>(a: DefinedComparand<T>): a is DefinedComparand<T>[] {
     return Array.isArray(a);
     // if (typeof a === "object") {
     //     return a.length !== undefined;

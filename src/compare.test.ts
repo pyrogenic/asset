@@ -89,8 +89,8 @@ describe("compare", () => {
                             expect(compare([pa], b, { library: true })).toEqual(a.localeCompare(b));
                         });
                         test(`[${a}] =?= ${pb}`, () => {
-                            expect(compare(a, pb)).toEqual(a.localeCompare(pb));
-                            expect(compare(a, pb, { library: true })).toEqual(a.localeCompare(b));
+                            expect(compare([a], pb)).toEqual(a.localeCompare(pb));
+                            expect(compare([a], pb, { library: true })).toEqual(a.localeCompare(b));
                         });
                         test(`[${pa}] =?= ${pb}`, () => {
                             expect(compare([pa], pb)).toEqual(pa.localeCompare(pb));
@@ -104,6 +104,11 @@ describe("compare", () => {
                             const toString = ({ a }: { a: string; }) => a;
                             expect(compare({ a: pa }, { a: pb }, { toString })).toEqual(pa.localeCompare(pb));
                             expect(compare({ a: pa }, { a: pb }, { toString, library: true })).toEqual(a.localeCompare(b));
+                        });
+                        test(`[{a: ${pa}}] =?= {a: ${pb}}`, () => {
+                            const toString = ({ a }: { a: string; }) => a;
+                            expect(compare([{ a: pa }], { a: pb }, { toString })).toEqual(pa.localeCompare(pb));
+                            expect(compare([{ a: pa }], { a: pb }, { toString, library: true })).toEqual(a.localeCompare(b));
                         });
                     });
                 }
